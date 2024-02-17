@@ -1,0 +1,27 @@
+.nav-header{
+    .dropdown-toggle::after {
+        display: none !important;
+      }
+    .gear-icon{
+        color: white ;
+        animation: App-logo-spin infinite 20s linear;
+    }
+    @keyframes App-logo-spin {
+        from{
+            transform: rotate(0deg);
+        }
+        to{
+            transform: rotate(360deg);
+        }
+    }  
+    .nav-link{
+        &.active{
+          color: #61dafb !important;
+        }
+    } 
+}
+
+  
+
+
+  
