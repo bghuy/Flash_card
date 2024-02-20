@@ -1,16 +1,19 @@
 import express from "express";
 // import { checkUserJWT, checkUserPermission } from "./../middlewares/JWTActions.js"
 import UserC from "../controller/UserC.js"
+import UserM from "./../middlewares/UserM.js"
 const router = express.Router();
 const initUserRoutes = (app) => {
     // router.post("/user/create", apiController.createUser);
-    // router.all('*', checkUserJWT, checkUserPermission,);
+    router.all('*', UserM.checkUserJWT);
     router.post("/login", UserC.loginFunc);
-    // router.post("/user/logout", UserC.logoutFunc);
+    router.post("/logout", UserC.logoutFunc);
     router.post("/register", UserC.createFunc);
-    // router.get("/user/read", UserC.readFunc);
+    router.get("/account", UserC.getUserAccount)
+    router.get("/read", UserC.readFunc);
+    router.put("/updatePassword", UserC.updatePWFunc)
     // router.put("/user/update", UserC.updateFunc);
-    // router.get("/user/account", userController.getUserAccount)
+
     // router.delete("/user/delete", userController.deleteFunc);
     // router.get("/group/read", groupController.readFunc);
 

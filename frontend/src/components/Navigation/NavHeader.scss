@@ -1,4 +1,6 @@
 .nav-header{
+
+    border-bottom: 1px solid white;
     .dropdown-toggle::after {
         display: none !important;
       }
@@ -17,9 +19,14 @@
     .nav-link{
         &.active{
           color: #61dafb !important;
+          border-bottom: 2px solid #61dafb;
         }
     } 
+    .web-icon{
+        cursor: pointer;
+    }
 }
+
 
   
 

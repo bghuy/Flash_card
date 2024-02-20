@@ -1,0 +1,46 @@
+.login-container{
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    .left{
+        .brand{
+            text-transform: uppercase;
+            font-size: xx-large;
+            font-weight: bold;
+            color: #0866ff;
+        }
+        .detail{
+            font-size: x-large;
+        }
+    }
+    .right{
+       
+        .login-form{
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+            box-sizing: border-box;
+        }
+        
+    }
+    .login-form{
+        border-radius: 10px;
+        span{
+            .forgot-password{
+                text-decoration: none;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+            
+        }
+    }
+}
+.red{
+    border: 1px solid red;
+}
+
+.green{
+    border: 1px solid green;
+}
+.yellow{
+    border: 1px solid yellow;
+}

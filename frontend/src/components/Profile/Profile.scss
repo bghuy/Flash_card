@@ -1,0 +1,44 @@
+.yellow{
+    background-color: yellow;
+}
+.red{
+    background-color: red;
+}
+// .my-tab .nav-link.active {
+//     color: white;
+//     border-color: blue;
+// }
+// .my-tab .nav-link.active:focus, .my-tab .nav-link.active:hover {
+//     color: white;
+//     background-color: blue;
+// }
+.nav-tabs .nav-link {
+    background-color: transparent !important;
+    color: gray ;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+  
+  .nav-tabs .nav-link.active {
+    border-bottom: solid 4px gray !important;
+    color: black ;
+    font-weight: bold;
+  }
+  .user-short-info{
+    text-align: left;
+    padding: 10px;
+    height: fit-content;
+    .user-avatar{
+        min-width: 64px;
+        min-height: 64px;
+        background-color: #5c6bc0;
+        border-radius: 50%;
+        .user-icon{
+            font-size: x-large;
+            color: white;
+        }
+    }
+  }
+  
+

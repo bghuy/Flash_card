@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom"
 // Add a request interceptor
 // Set config defaults when creating the instance
 const instance = axios.create({
@@ -28,13 +29,13 @@ instance.interceptors.response.use(function (response) {
     // Do something with response error
     const status = error.response?.status || 500;
     console.log(status);
+    const navigate = useNavigate();
     switch (status) {
         // authentication (token related issues)
         case 401: {
             toast.error("Unauthorized the user, please login ...");
-            // window.location.href("/login");
-            return error && error.response.data;
-            // return Promise.reject(error);
+            // return error && error.response.data;
+            return Promise.reject(error);
         }
 
         // forbidden (permission related issues)

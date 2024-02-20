@@ -1,0 +1,50 @@
+.user-info-container{
+    border: 2px solid gray;
+    padding: 20px;
+    width: 30%;
+    margin: 0px auto;
+    border-radius: 10px;
+    .edit-icon{
+        cursor: pointer;
+        color: gray;
+        &:hover{
+            color: black;
+        }
+    }
+    .info-area{
+        font-weight: 500;
+    }
+    .detail-container{
+        
+        .left{
+            min-width: 80%;
+            text-align: start;
+            label{
+                text-align: start;
+                min-width: 40%;
+            }
+            span{
+                color: #757575;
+                text-align: start;
+            }
+        }
+    }
+}
+.user-short-info{
+    text-align: left;
+    padding: 10px;
+    height: fit-content;
+    .user-avatar{
+        min-width: 64px;
+        min-height: 64px;
+        background-color: #5c6bc0;
+        border-radius: 50%;
+        .user-icon{
+            font-size: x-large;
+            color: white;
+        }
+    }
+}
+.wrapper{
+    
+}
