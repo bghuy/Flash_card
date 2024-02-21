@@ -97,7 +97,7 @@ const login = async (data) => {
                 }
             } else {
                 return {
-                    EM: "login unsuccessfully",//error message
+                    EM: "login fail, email/phone number or password is in correct",//error message
                     EC: 3,//error code -1 means error , 0 means no error
                     DT: null
                 }

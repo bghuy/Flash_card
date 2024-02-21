@@ -2,17 +2,17 @@ import React, { useState, useEffect, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserAccount } from './../services/userService.js';
 const UserContext = createContext(null);
+const userDefault = {
+    isLoading: true,
+    isAuthenticated: false,
+    token: "fake token",
+    email: '',
+    username: ''
 
+}
 const UserProvider = ({ children }) => {
-    const navigate = useNavigate();
-    const userDefault = {
-        isLoading: true,
-        isAuthenticated: false,
-        token: "fake token",
-        email: '',
-        username: ''
+    // const navigate = useNavigate();
 
-    }
     const [user, setUser] = useState(userDefault);
     useEffect(() => {
         // console.log("context trigger")
@@ -21,7 +21,6 @@ const UserProvider = ({ children }) => {
             try {
                 let response = null;
                 response = await getUserAccount();
-                console.log("check response>>", response);
                 const email = await response.DT.email;
                 const username = await response.DT.username;
                 const token = await response.DT.token;
@@ -32,38 +31,38 @@ const UserProvider = ({ children }) => {
                     email: email,
                     username: username
                 }
-                console.log(data);
                 if (response && +response.EC === 0) {
-                    setUser(data)
+                    // setUser(data)
+                    setUser(prevState => ({ ...prevState, ...data }))
                 }
                 else {
-                    setUser({ ...userDefault, isLoading: false })
+                    // setUser({ ...userDefault, isLoading: false })
+                    setUser(prevState => ({ ...prevState, ...userDefault, isLoading: false }))
                 }
 
             } catch (error) {
                 console.log('Error fetching data:', error)
-                navigate('/login')
-                setUser({ ...userDefault, isLoading: false })
+                // navigate('/login')
+                // setUser({ ...userDefault, isLoading: false })
+                setUser(prevState => ({ ...prevState, ...userDefault, isLoading: false }))
             }
         }
-
-        if (window.location.pathname !== "/" && window.location.pathname !== "/login" && window.location.pathname !== "/register" && window.location.pathname !== "/community") {
-            getAccount();
-        } else {
-            setUser({ ...user, isLoading: false })
-        }
-
-
-
-
-
+        getAccount();
+        // if (window.location.pathname !== "/login" && window.location.pathname !== "/register") {
+        //     getAccount();
+        // } else {
+        //     // setUser({ ...user, isLoading: false })
+        //     setUser(prevState => ({ ...prevState, isLoading: false }))
+        // }
     }, [])
     const loginContext = (userData) => {
-        setUser({ ...userData, isLoading: false });
+        // setUser({ ...userData, isLoading: false });
+        setUser(prevState => ({ ...prevState, ...userData, isLoading: false }))
     };
 
     const logoutContext = () => {
-        setUser({ ...userDefault, isLoading: false });
+        // setUser({ ...userDefault, isLoading: false });
+        setUser(prevState => ({ ...prevState, ...userDefault, isLoading: false }))
     };
 
     return (

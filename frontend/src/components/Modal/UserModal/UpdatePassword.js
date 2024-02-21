@@ -22,7 +22,7 @@ const ModalChangePassword = (props) => {
     }
 
     const [passwordData, setPasswordData] = useState(defaultPasswordData);
-    const [validInputs, setValidInputs] = useState(defaultValidInputs);
+    const [validInputs, setValidInputs] = useState({ ...defaultValidInputs });
     const handleOnChangeInput = (value, name) => {
         try {
             let _data = { ...passwordData };
@@ -69,10 +69,14 @@ const ModalChangePassword = (props) => {
 
         return isValid;
     };
-
+    const handleCloseModalUser = () => {
+        setPasswordData(defaultPasswordData);
+        setValidInputs({ ...defaultValidInputs });
+        props.onHide();
+    };
     const handleConfirmUpdate = async () => {
         const isValid = checkValidateInputs();
-        if (isValid && passwordData.currentPassword && passwordData.newPassword && passwordData.confirmedNewPassword) {
+        if (isValid) {
             let data = {
                 ...passwordData, email: user.email
             }
@@ -98,20 +102,9 @@ const ModalChangePassword = (props) => {
             }
             handleCloseModalUser();
         } else {
-            toast.error("please fill all information needed");
-            handleCloseModalUser();
+            // toast.error("please fill all information needed");
             navigate("/profile");
         }
-    };
-
-    const handleCloseModalUser = () => {
-        setPasswordData(defaultPasswordData);
-        setValidInputs({
-            currentPassword: true,
-            newPassword: true,
-            confirmedNewPassword: true
-        });
-        props.onHide();
     };
 
     return (

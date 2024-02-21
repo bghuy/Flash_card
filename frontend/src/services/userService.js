@@ -1,9 +1,7 @@
 // import axios from 'axios';
 import axios from '../setup/axios';
 const registerNewUser = async (userData) => {
-    console.log("userData", userData);
     const data = await axios.post('/user/v1/register', { ...userData });
-    console.log(data);
     return data;
 }
 const login = async (loginData) => {
@@ -23,7 +21,6 @@ const deleteUser = async (user) => {
     return data;
 }
 const updateUserPW = async (updateData) => {
-    console.log("check user>> ", updateData);
     const data = await axios.put(`/user/v1/updatePassword`, updateData);
     return data;
 }

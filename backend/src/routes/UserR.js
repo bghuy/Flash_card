@@ -12,6 +12,7 @@ const initUserRoutes = (app) => {
     router.get("/account", UserC.getUserAccount)
     router.get("/read", UserC.readFunc);
     router.put("/updatePassword", UserC.updatePWFunc)
+    router.put("/updateUsername", UserC.updateUNFunc)
     // router.put("/user/update", UserC.updateFunc);
 
     // router.delete("/user/delete", userController.deleteFunc);

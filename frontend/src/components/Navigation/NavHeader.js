@@ -15,11 +15,13 @@ import { toast } from 'react-toastify';
 import { UserContext } from '../../context/UserContext.js';
 const NavHeader = () => {
     const { user, logoutContext } = useContext(UserContext);
+
     const navigate = useNavigate()
     const handleLogout = async () => {
         logoutContext();
         const response = await logout();
         if (response && +response.EC === 0 && response.EM) {
+            // setUserAuth(false);
             toast.success(response.EM);
             navigate("/login");
         }
@@ -37,7 +39,13 @@ const NavHeader = () => {
     }
     const [userAuth, setUserAuth] = useState(false);
     useEffect(() => {
-        setUserAuth(true);
+        // console.log("check user", user.isAuthenticated);
+        // if (user.isAuthenticated) {
+        //     setUserAuth(true);
+        // }
+        // else {
+        //     setUserAuth(false);
+        // }
     }, [user.isAuthenticated])
     return (
         <Navbar expand="lg" className="bg-body-tertiary nav-header" bg="dark" data-bs-theme="dark">
@@ -54,10 +62,10 @@ const NavHeader = () => {
                     >
                         <NavLink to="/" className="nav-link">Home</NavLink>
                         <NavLink to="/community" className="nav-link">Community</NavLink>
-                        {user.isAuthenticated &&
+                        {user.isAuthenticated === true &&
                             <NavLink to="/collections" className="nav-link" >Collections</NavLink>
                         }
-                        {!user.isAuthenticated &&
+                        {user.isAuthenticated === false &&
                             <NavLink to="/login" className="nav-link"> Sign in</NavLink>
                         }
                         <NavLink to="/about" className="nav-link"> About</NavLink>

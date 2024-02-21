@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import Button from "react-bootstrap/Button"
 import ModalChangePassword from '../../Modal/UserModal/UpdatePassword.js';
+import ModalEditUsername from '../../Modal/UserModal/EditUsername.js';
 import "./UserProfile.scss"
 function UserProfile(props) {
     const userDefault = {
@@ -17,6 +18,7 @@ function UserProfile(props) {
     const [userInfo, setUserInfo] = useState({});
     const { user } = useContext(UserContext);
     const [showModalUpdatePW, setShowModalUpdatePW] = useState(false);
+    const [showModalEditUN, setShowModalEditUN] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,9 +41,6 @@ function UserProfile(props) {
             navigate('/login')
         }
     }, [])
-    const handleEditUsername = () => {
-
-    }
     const handleEditPhone = () => {
 
     }
@@ -54,6 +53,12 @@ function UserProfile(props) {
     const onHideModalUpdatePW = () => {
         setShowModalUpdatePW(false);
     }
+    const handleEditUsername = () => {
+        setShowModalEditUN(true);
+    }
+    const onHideModalEditUN = () => {
+        setShowModalEditUN(false);
+    }
     return (
         <>
             <div className='user-info-container'>
@@ -63,7 +68,12 @@ function UserProfile(props) {
                         <span>{userInfo.username}</span>
                     </div>
                     <div className='right'>
-                        <FontAwesomeIcon icon={faPenToSquare} className='edit-icon'></FontAwesomeIcon>
+                        <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            className='edit-icon'
+                            onClick={() => { handleEditUsername() }}
+
+                        ></FontAwesomeIcon>
                     </div>
 
                 </div>
@@ -98,6 +108,10 @@ function UserProfile(props) {
             <ModalChangePassword
                 show={showModalUpdatePW}
                 onHide={onHideModalUpdatePW}
+            />
+            <ModalEditUsername
+                show={showModalEditUN}
+                onHide={onHideModalEditUN}
             />
         </>
 

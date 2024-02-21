@@ -8,9 +8,9 @@ import AppRoutes from './../../routes/AppRoutes.js';
 function AppContent(props) {
     const [userIsLoadingChange, SetUserIsLoadingChange] = useState(false);
     const { user } = useContext(UserContext);
-    useEffect(() => {
-        SetUserIsLoadingChange(true);
-    }, [user.isLoading]);
+    // useEffect(() => {
+    //     SetUserIsLoadingChange(true);
+    // }, [user.isLoading]);
     return (
         <div className="App">
 

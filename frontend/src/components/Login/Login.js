@@ -58,7 +58,6 @@ function Login(props) {
             const serverData = await response;
             if (serverData && +serverData.EC === 0 && serverData.EM) {
                 toast.success(serverData.EM);
-                console.log(serverData.DT);
                 const email = serverData.DT.email;
                 const username = serverData.DT.username;
                 const token = serverData.DT.token;
