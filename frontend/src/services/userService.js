@@ -24,6 +24,18 @@ const updateUserPW = async (updateData) => {
     const data = await axios.put(`/user/v1/updatePassword`, updateData);
     return data;
 }
+const updateUserEmail = async (updateData) => {
+    const data = await axios.put(`/user/v1/updateEmail`, updateData);
+    return data;
+}
+const updateUserPhone = async (updateData) => {
+    const data = await axios.put(`/user/v1/updatePhone`, updateData);
+    return data;
+}
+const editUsername = async (updateData) => {
+    const data = await axios.put(`/user/v1/editUsername`, updateData);
+    return data;
+}
 const getUserAccount = async () => {
     const data = await axios.get(`/user/v1/account`);
     return data;
@@ -32,4 +44,16 @@ const logout = async () => {
     const data = await axios.post('/user/v1/logout');
     return data;
 }
-export { registerNewUser, login, fetchAllUsers, deleteUser, updateUserPW, getUserAccount, logout, fetchUser };
+export {
+    registerNewUser,
+    login,
+    fetchAllUsers,
+    deleteUser,
+    updateUserPW,
+    getUserAccount,
+    logout,
+    fetchUser,
+    editUsername,
+    updateUserEmail,
+    updateUserPhone
+};

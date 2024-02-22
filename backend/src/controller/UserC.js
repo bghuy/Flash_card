@@ -31,7 +31,7 @@ const loginFunc = async (req, res) => {
             ;
             let data = await UserS.login(req.body);
             if (data && data.DT && data.DT.token) {
-                res.cookie("token", data.DT.token, { httpOnly: true, maxAge: 12 * 60 * 60 * 1000 });
+                res.cookie("token", data.DT.token, { httpOnly: true, maxAge: 6 * 60 * 60 * 1000 });
             }
             return res.status(200).json({
                 EM: data.EM,//error message
@@ -57,7 +57,6 @@ const loginFunc = async (req, res) => {
 const logoutFunc = async (req, res) => {
     try {
         let cookies = req.cookies;
-        console.log("check cookies", cookies);
         if (cookies && cookies.token) {
             res.clearCookie("token");
             return res.status(200).json({
@@ -110,20 +109,9 @@ const readFunc = async (req, res) => {
         })
     }
 }
-const updateFunc = async (req, res) => {
-    try {
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            EM: "error from data",//error message
-            EC: "1",//error code -1 means error , 0 means no error
-            DT: "",//data
-        })
-    }
-}
 const getUserAccount = async (req, res) => {
     if (req && req.user && req.token) {
+        res.cookie("token", req.token, { httpOnly: true, maxAge: 6 * 60 * 60 * 1000 });
         return res.status(200).json({
             EM: "ok",//error message
             EC: 0,//error code -1 means error , 0 means no error
@@ -169,11 +157,11 @@ const updatePWFunc = async (req, res) => {
         })
     }
 }
-const updateUNFunc = async (req, res) => {
+const editUNFunc = async (req, res) => {
     try {
         const { email, username, newUsername } = req.body;
         if (req.body && username && newUsername && email) {
-            let data = await UserS.updateUserPW(req.body);
+            let data = await UserS.editUsername(req.body);
             return res.status(200).json({
                 EM: data.EM,//error message
                 EC: data.EC,//error code -1 means error , 0 means no error
@@ -196,7 +184,71 @@ const updateUNFunc = async (req, res) => {
         })
     }
 }
+const updateEmailFunc = async (req, res) => {
+    try {
+        const { email, username, newEmail } = req.body;
+        if (req.body && username && newEmail && email) {
+            let data = await UserS.updateEmail(req.body);
+            return res.status(200).json({
+                EM: data.EM,//error message
+                EC: data.EC,//error code -1 means error , 0 means no error
+                DT: data.DT,//data
+            });
+        }
+        else {
+            return res.status(200).json({
+                EM: "update email fail",//error message
+                EC: 3,//error code -1 means error , 0 means no error
+                DT: null,//data
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "error from data",//error message
+            EC: 1,//error code -1 means error , 0 means no error
+            DT: null,//data
+        })
+    }
+}
+const updatePhoneFunc = async (req, res) => {
+    try {
+        const { email, username, newPhone } = req.body;
+        if (req.body && username && newPhone && email) {
+            let data = await UserS.updatePhone(req.body);
+            return res.status(200).json({
+                EM: data.EM,//error message
+                EC: data.EC,//error code -1 means error , 0 means no error
+                DT: data.DT,//data
+            });
+        }
+        else {
+            return res.status(200).json({
+                EM: "update phone number fail",//error message
+                EC: 3,//error code -1 means error , 0 means no error
+                DT: null,//data
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: "error from data",//error message
+            EC: 1,//error code -1 means error , 0 means no error
+            DT: null,//data
+        })
+    }
+}
 
 
 
-module.exports = { loginFunc, logoutFunc, createFunc, readFunc, updateFunc, getUserAccount, updatePWFunc, updateUNFunc };
+module.exports = {
+    loginFunc,
+    logoutFunc,
+    createFunc,
+    readFunc,
+    getUserAccount,
+    updatePWFunc,
+    editUNFunc,
+    updateEmailFunc,
+    updatePhoneFunc
+};

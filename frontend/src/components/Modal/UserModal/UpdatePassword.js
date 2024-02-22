@@ -84,11 +84,10 @@ const ModalChangePassword = (props) => {
             if (responseUpdate && +responseUpdate.EC === 0 && responseUpdate.EM) {
                 setValidInputs(defaultValidInputs);
                 setPasswordData(defaultPasswordData)
-
                 toast.success(responseUpdate.EM);
-                logoutContext();
                 const responseLogout = await logout();
                 if (responseLogout && +responseLogout.EC === 0 && responseLogout.EM) {
+                    logoutContext();
                     navigate("/login");
                 }
                 else {

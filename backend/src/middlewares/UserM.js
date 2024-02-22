@@ -1,18 +1,32 @@
 
 require("dotenv").config()
+import db from "./../models/index.js"
 const nonSecurePaths = ['/login', '/register', '/logout', '/community'];
 import UserU from "./../utilities/JwtU.js"
-const checkUserJWT = (req, res, next) => {
+import JwtU from "./../utilities/JwtU.js"
+const checkUserJWT = async (req, res, next) => {
     if (nonSecurePaths.includes(req.path)) return next();
     let cookies = req.cookies;
-    console.log("check cookies", cookies);
     if (cookies && cookies.token) {
         let token = cookies.token;
         let decoded = UserU.verifyToken(token);
         if (decoded) {
-            console.log(decoded)
-            req.user = decoded;
-            req.token = token;
+            let user = await db.User.findOne(
+                { where: { email: decoded.email } }
+            )
+            if (user && user.username && user.email) {
+                let payload = {
+                    username: user.username,
+                    email: user.email,
+                }
+                let recreateToken = JwtU.createJWT(payload)
+                req.user = payload;
+                req.token = recreateToken;
+            }
+            else {
+                req.user = null;
+                req.token = null;
+            }
             return next();
         }
         else {

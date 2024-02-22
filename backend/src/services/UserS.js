@@ -202,5 +202,124 @@ const updateUserPW = async (data) => {
         }
     }
 }
+const editUsername = async (data) => {
+    try {
+        let user = await db.User.findOne(
+            { where: { email: data.email, username: data.username } }
+        )
+        if (user) {
+            if (data && data.newUsername) {
+                user.username = data.newUsername;
+                await user.save()
+                return {
+                    EM: "update username success",
+                    EC: 0,
+                    DT: null
+                }
+            }
+            else {
+                return {
+                    EM: "please enter new username",
+                    EC: 4,
+                    DT: null
+                }
+            }
+        }
+        else {
+            return {
+                EM: "not found user",//error message
+                EC: 3,//error code -1 means error , 0 means no error
+                DT: null
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "something wrong with service",
+            EC: 4,
+            DT: null
+        }
+    }
+}
+const updateEmail = async (data) => {
+    try {
+        let user = await db.User.findOne(
+            { where: { email: data.email, username: data.username } }
+        )
+        if (user) {
+            if (data && data.newEmail) {
+                user.email = data.newEmail;
+                await user.save()
+                return {
+                    EM: "update email success",
+                    EC: 0,
+                    DT: null
+                }
+            }
+            else {
+                return {
+                    EM: "please enter new email",
+                    EC: 4,
+                    DT: null
+                }
+            }
+        }
+        else {
+            return {
+                EM: "not found user",//error message
+                EC: 3,//error code -1 means error , 0 means no error
+                DT: null
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "something wrong with service",
+            EC: 4,
+            DT: null
+        }
+    }
+}
+const updatePhone = async (data) => {
+    try {
+        let user = await db.User.findOne(
+            { where: { email: data.email, username: data.username } }
+        )
+        if (user) {
+            if (data && data.newPhone) {
+                user.phone = data.newPhone;
+                await user.save()
+                return {
+                    EM: "update phone number success",
+                    EC: 0,
+                    DT: null
+                }
+            }
+            else {
+                return {
+                    EM: "please enter new phone number",
+                    EC: 4,
+                    DT: null
+                }
+            }
+        }
+        else {
+            return {
+                EM: "not found user",//error message
+                EC: 3,//error code -1 means error , 0 means no error
+                DT: null
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "something wrong with service",
+            EC: 4,
+            DT: null
+        }
+    }
+}
 
-module.exports = { create, login, fetch, updateUserPW }
+
+
+module.exports = { create, login, fetch, updateUserPW, editUsername, updateEmail, updatePhone }

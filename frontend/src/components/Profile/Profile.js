@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import "./Profile.scss"
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -10,7 +10,8 @@ import { UserContext } from "./../../context/UserContext.js"
 import * as faIcons from '@fortawesome/free-solid-svg-icons'
 
 function Profile(props) {
-    const { user, logoutContext } = useContext(UserContext);
+    const { user, logoutContext, getAccount } = useContext(UserContext);
+    const [userUpdate, setUpdate] = useState(false)
 
     // Kiểm tra xem user có tồn tại không và user.username có tồn tại không
     const firstLetter = user && user.username ? user.username[0].toUpperCase() : 'G';
@@ -21,7 +22,10 @@ function Profile(props) {
     // Kiểm tra xem biến icon có tồn tại trong thư viện Font Awesome không
     // Nếu không, sử dụng biến mặc định là faA
     const icon = faIcons[iconVariableName] || faIcons.faA;
-
+    useEffect(() => {
+        console.log("user profile", user);
+        // Khi user thay đổi, component sẽ được render lại với dữ liệu người dùng mới
+    }, [user]);
     return (
         <>
             <div className='user-short-info d-flex'>

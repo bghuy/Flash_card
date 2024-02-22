@@ -8,6 +8,8 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import Button from "react-bootstrap/Button"
 import ModalChangePassword from '../../Modal/UserModal/UpdatePassword.js';
 import ModalEditUsername from '../../Modal/UserModal/EditUsername.js';
+import ModalUpdateEmail from '../../Modal/UserModal/ModalUpdateEmail.js';
+import ModalUpdatePhone from '../../Modal/UserModal/ModalUpdatePhone.js';
 import "./UserProfile.scss"
 function UserProfile(props) {
     const userDefault = {
@@ -19,6 +21,8 @@ function UserProfile(props) {
     const { user } = useContext(UserContext);
     const [showModalUpdatePW, setShowModalUpdatePW] = useState(false);
     const [showModalEditUN, setShowModalEditUN] = useState(false);
+    const [showModalUpdateEmail, setShowModalUpdateEmail] = useState(false);
+    const [showModalUpdatePhone, setShowModalUpdatePhone] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -59,13 +63,25 @@ function UserProfile(props) {
     const onHideModalEditUN = () => {
         setShowModalEditUN(false);
     }
+    const handleUpdateEmail = () => {
+        setShowModalUpdateEmail(true);
+    }
+    const onHideModalUpdateEmail = () => {
+        setShowModalUpdateEmail(false);
+    }
+    const handleUpdatePhone = () => {
+        setShowModalUpdatePhone(true);
+    }
+    const onHideModalUpdatePhone = () => {
+        setShowModalUpdatePhone(false);
+    }
     return (
         <>
             <div className='user-info-container'>
                 <div className='detail-container d-flex justify-content-between align-items-center' id='username'>
                     <div className='left'>
                         <label className='me-3'>Username </label>
-                        <span>{userInfo.username}</span>
+                        <span>{user.username}</span>
                     </div>
                     <div className='right'>
                         <FontAwesomeIcon
@@ -81,11 +97,15 @@ function UserProfile(props) {
                 <div className='detail-container d-flex justify-content-between  align-items-center' id='email'>
                     <div className='left'>
                         <label className='me-3'>Email </label>
-                        <span>{userInfo.email}</span>
+                        <span>{user.email}</span>
 
                     </div>
                     <div className='right'>
-                        <FontAwesomeIcon icon={faPenToSquare} className='edit-icon'></FontAwesomeIcon>
+                        <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            className='edit-icon'
+                            onClick={() => { handleUpdateEmail() }}
+                        ></FontAwesomeIcon>
                     </div>
 
                 </div>
@@ -96,7 +116,11 @@ function UserProfile(props) {
                         <span>{userInfo.phone}</span>
                     </div>
                     <div className='right'>
-                        <FontAwesomeIcon icon={faPenToSquare} className='edit-icon'></FontAwesomeIcon>
+                        <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            className='edit-icon'
+                            onClick={() => { handleUpdatePhone() }}
+                        ></FontAwesomeIcon>
                     </div>
 
                 </div>
@@ -112,6 +136,14 @@ function UserProfile(props) {
             <ModalEditUsername
                 show={showModalEditUN}
                 onHide={onHideModalEditUN}
+            />
+            <ModalUpdateEmail
+                show={showModalUpdateEmail}
+                onHide={onHideModalUpdateEmail}
+            />
+            <ModalUpdatePhone
+                show={showModalUpdatePhone}
+                onHide={onHideModalUpdatePhone}
             />
         </>
 

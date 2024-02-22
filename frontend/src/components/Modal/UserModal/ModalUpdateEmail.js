@@ -4,64 +4,68 @@ import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import _ from "lodash";
 import Form from 'react-bootstrap/Form';
-import { editUsername, logout } from "./../../../services/userService.js"
+import { updateUserEmail, logout } from "./../../../services/userService.js"
 import { UserContext } from './../../../context/UserContext.js';
 import { useNavigate } from "react-router-dom"
 
-const ModalEditUsername = (props) => {
+const ModalUpdateEmail = (props) => {
     const navigate = useNavigate()
-    const { user, getAccount, setUser, updateUserField } = useContext(UserContext);
-    const defaultUsername = {
-        newUsername: ''
+    const { user, getAccount, setUser, logoutContext } = useContext(UserContext);
+    const defaultEmail = {
+        newEmail: ''
     };
     const defaultValidInputs = {
-        newUsername: true
+        newEmail: true
     }
 
-    const [updateUsername, setUsername] = useState(defaultUsername);
+    const [updateEmail, setEmail] = useState(defaultEmail);
     const [validInputs, setValidInputs] = useState(defaultValidInputs);
     const handleCloseModalUser = () => {
-        setUsername(defaultUsername)
+        setEmail(defaultEmail)
         setValidInputs(defaultValidInputs);
         props.onHide();
     };
     const handleOnChangeInput = (value, name) => {
-        let _data = { ...updateUsername };
+        let _data = { ...updateEmail };
         _data[name] = value;
-        setUsername(_data);
+        setEmail(_data);
         setValidInputs(prevState => ({ ...prevState, [name]: true }));
     };
 
     const checkValidateInputs = () => {
-        const { newUsername } = updateUsername;
-        if (!newUsername) {
-            toast.error('Please enter new username');
-            setValidInputs(prevState => ({ ...prevState, newUsername: false }));
+        const { newEmail } = updateEmail;
+        if (!newEmail) {
+            toast.error('Please enter new email');
+            setValidInputs(prevState => ({ ...prevState, newEmail: false }));
             return false;
         }
         return true;
     };
 
     const handleConfirmUpdate = async () => {
-        if (checkValidateInputs() && updateUsername.newUsername) {
+        if (checkValidateInputs() && updateEmail.newEmail) {
             let data = {
                 email: user.email,
                 username: user.username,
-                newUsername: updateUsername.newUsername
+                newEmail: updateEmail.newEmail
             }
-            const responseUpdate = await editUsername(data);
+            const responseUpdate = await updateUserEmail(data);
             if (responseUpdate && +responseUpdate.EC === 0 && responseUpdate.EM) {
-                toast.success(responseUpdate.EM);
-                updateUserField("username", data.newUsername)
-                // Cập nhật thông tin người dùng sau khi cập nhật username thành công
-                await getAccount(); // hoặc cập nhật trực tiếp user ở đây
-                setUsername(defaultUsername)
                 setValidInputs(defaultValidInputs);
-                handleCloseModalUser();
+                setEmail(defaultEmail)
+                toast.success(responseUpdate.EM);
+                const responseLogout = await logout();
+                if (responseLogout && +responseLogout.EC === 0 && responseLogout.EM) {
+                    logoutContext();
+                    navigate("/login");
+                }
+                else {
+                    toast.error(responseLogout.EM);
+                }
             }
             else {
                 toast.error(responseUpdate.EM);
-                setUsername(defaultUsername)
+                setEmail(defaultEmail)
                 setValidInputs(defaultValidInputs);
             }
             handleCloseModalUser();
@@ -82,21 +86,21 @@ const ModalEditUsername = (props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Update new username
+                    Update new email
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>New username</Form.Label>
+                        <Form.Label>New email</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter new username"
-                            onChange={(e) => handleOnChangeInput(e.target.value, "newUsername")}
-                            isInvalid={!validInputs.newUsername}
+                            placeholder="Enter new email"
+                            onChange={(e) => handleOnChangeInput(e.target.value, "newEmail")}
+                            isInvalid={!validInputs.newEmail}
                         />
                         <Form.Control.Feedback type="invalid">
-                            Please provide new username.
+                            Please provide new email.
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Form>
@@ -113,4 +117,4 @@ const ModalEditUsername = (props) => {
     );
 }
 
-export default ModalEditUsername;
+export default ModalUpdateEmail;
