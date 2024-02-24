@@ -7,12 +7,12 @@ require("dotenv").config()
 // Add headers before the routes are defined
 import { configCors } from "./config/cors.js";
 import initUserRoutes from './routes/UserR.js'
+import initMyCollectionRoutes from "./routes/MyCollectionR.js";
 // import { createJWT, verifyToken } from "./middlewares/JWTActions.js"
 const bodyParser = require('body-parser')
 const app = express();
 import cookieParser from "cookie-parser";
 app.use(bodyParser.urlencoded({ extended: false }))
-
 // parse application/json
 app.use(bodyParser.json())
 configCors(app);
@@ -22,6 +22,7 @@ app.use(cookieParser())
 
 configViewEngine(app);
 initUserRoutes(app);
+initMyCollectionRoutes(app);
 // initWebRoutes(app);
 // initApiRoutes(app);
 const PORT = process.env.PORT || 8000;

@@ -15,7 +15,8 @@ const ModalUpdateEmail = (props) => {
         newEmail: ''
     };
     const defaultValidInputs = {
-        newEmail: true
+        newEmail: true,
+        errorMessage: ""
     }
 
     const [updateEmail, setEmail] = useState(defaultEmail);
@@ -34,9 +35,15 @@ const ModalUpdateEmail = (props) => {
 
     const checkValidateInputs = () => {
         const { newEmail } = updateEmail;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!newEmail) {
             toast.error('Please enter new email');
-            setValidInputs(prevState => ({ ...prevState, newEmail: false }));
+            setValidInputs(prevState => ({ ...prevState, newEmail: false, errorMessage: "please enter new email" }));
+            return false;
+        }
+        if (!emailPattern.test(newEmail)) {
+            toast.error('Please provide valid email');
+            setValidInputs(prevState => ({ ...prevState, newEmail: false, errorMessage: "Not an email" }));
             return false;
         }
         return true;
@@ -100,7 +107,7 @@ const ModalUpdateEmail = (props) => {
                             isInvalid={!validInputs.newEmail}
                         />
                         <Form.Control.Feedback type="invalid">
-                            Please provide new email.
+                            {validInputs.errorMessage}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Form>

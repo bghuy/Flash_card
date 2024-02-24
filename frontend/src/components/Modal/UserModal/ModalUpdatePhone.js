@@ -15,7 +15,8 @@ const ModalUpdatePhone = (props) => {
         newPhone: ''
     };
     const defaultValidInputs = {
-        newPhone: true
+        newPhone: true,
+        errorMessage: ""
     }
 
     const [updatePhone, setPhone] = useState(defaultPhone);
@@ -34,9 +35,15 @@ const ModalUpdatePhone = (props) => {
 
     const checkValidateInputs = () => {
         const { newPhone } = updatePhone;
+        const phoneNumberPattern = /^\d{10}$/;
         if (!newPhone) {
             toast.error('Please enter new email');
-            setValidInputs(prevState => ({ ...prevState, newPhone: false }));
+            setValidInputs(prevState => ({ ...prevState, newPhone: false, errorMessage: "please enter new phone number" }));
+            return false;
+        }
+        if (!phoneNumberPattern.test(newPhone)) {
+            toast.error('Phone number is not valid, phone number must have 10 characters');
+            setValidInputs(prevState => ({ ...prevState, newPhone: false, errorMessage: "phone number is invalid" }));
             return false;
         }
         return true;
@@ -101,7 +108,7 @@ const ModalUpdatePhone = (props) => {
                             isInvalid={!validInputs.newPhone}
                         />
                         <Form.Control.Feedback type="invalid">
-                            Please provide new phone number.
+                            {validInputs.errorMessage}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Form>

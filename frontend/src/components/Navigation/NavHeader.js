@@ -15,7 +15,6 @@ import { toast } from 'react-toastify';
 import { UserContext } from '../../context/UserContext.js';
 const NavHeader = () => {
     const { user, logoutContext } = useContext(UserContext);
-
     const navigate = useNavigate()
     const handleLogout = async () => {
         logoutContext();
@@ -37,6 +36,7 @@ const NavHeader = () => {
     const navigateToRegister = () => {
         navigate("/register")
     }
+    const pathShowSearchBar = ["/community", "/collections"]
     const [userAuth, setUserAuth] = useState(false);
     useEffect(() => {
         // console.log("check user", user.isAuthenticated);
@@ -70,7 +70,7 @@ const NavHeader = () => {
                         }
                         <NavLink to="/about" className="nav-link"> About</NavLink>
                     </Nav>
-                    {window.location.pathname === "/community" &&
+                    {pathShowSearchBar.includes(window.location.pathname) &&
                         <Form className="d-flex" >
                             <Form.Control
                                 type="search"
