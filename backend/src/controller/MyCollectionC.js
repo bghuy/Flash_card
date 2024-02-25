@@ -1,4 +1,5 @@
 import MyCollectionS from "./../services/MyCollectionS.js"
+const appRoot = require('app-root-path');
 const readFunc = async (req, res) => {
     try {
         if (req.query && req.query.email) {
@@ -125,8 +126,10 @@ const createFunc = async (req, res) => {
     }
 }
 const readByPageFunc = async (req, res) => {
+
     try {
         if (req.query.page && req.query.limit) {
+
             const { page, limit } = req.query;
             let data = await MyCollectionS.fetchWithPageAndLimit(+page, +limit);
             return res.status(200).json({
@@ -136,6 +139,7 @@ const readByPageFunc = async (req, res) => {
             });
         }
         else {
+
             let data = await userApiService.fetchAll();
             return res.status(200).json({
                 EM: data.EM,//error message

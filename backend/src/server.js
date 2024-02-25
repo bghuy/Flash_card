@@ -8,6 +8,7 @@ require("dotenv").config()
 import { configCors } from "./config/cors.js";
 import initUserRoutes from './routes/UserR.js'
 import initMyCollectionRoutes from "./routes/MyCollectionR.js";
+import initUploadsRoutes from "./routes/Upload.js";
 // import { createJWT, verifyToken } from "./middlewares/JWTActions.js"
 const bodyParser = require('body-parser')
 const app = express();
@@ -23,6 +24,7 @@ app.use(cookieParser())
 configViewEngine(app);
 initUserRoutes(app);
 initMyCollectionRoutes(app);
+initUploadsRoutes(app);
 // initWebRoutes(app);
 // initApiRoutes(app);
 const PORT = process.env.PORT || 8000;

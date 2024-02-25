@@ -13,8 +13,13 @@ import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import { logout } from "./../../services/userService.js"
 import { toast } from 'react-toastify';
 import { UserContext } from '../../context/UserContext.js';
+const defaultSearchValue = {
+    value: '', isSearch: false
+}
+const pathShowSearchBar = ["/community", "/collections"]
 const NavHeader = () => {
-    const { user, logoutContext } = useContext(UserContext);
+    const { user, logoutContext, updateSearchValue, searchValue } = useContext(UserContext);
+    const [searchBarValue, setSearchBarValue] = useState(defaultSearchValue)
     const navigate = useNavigate()
     const handleLogout = async () => {
         logoutContext();
@@ -36,17 +41,19 @@ const NavHeader = () => {
     const navigateToRegister = () => {
         navigate("/register")
     }
-    const pathShowSearchBar = ["/community", "/collections"]
+
     const [userAuth, setUserAuth] = useState(false);
-    useEffect(() => {
-        // console.log("check user", user.isAuthenticated);
-        // if (user.isAuthenticated) {
-        //     setUserAuth(true);
-        // }
-        // else {
-        //     setUserAuth(false);
-        // }
-    }, [user.isAuthenticated])
+    const handleSearchCollections = (e) => {
+        e.preventDefault();
+        const trimmedSearchValue = searchBarValue.value.trim();
+        if (trimmedSearchValue !== '') {
+            const searchQuery = encodeURIComponent(trimmedSearchValue);
+            navigate(`/collections?email=${user.email}&page=1&limit=2&search=${searchQuery}`);
+            updateSearchValue({ value: trimmedSearchValue, isSearch: true });
+        }
+        setSearchBarValue(prevState => (defaultSearchValue))
+    };
+
     return (
         <Navbar expand="lg" className="bg-body-tertiary nav-header" bg="dark" data-bs-theme="dark">
             <Container fluid>
@@ -63,7 +70,7 @@ const NavHeader = () => {
                         <NavLink to="/" className="nav-link">Home</NavLink>
                         <NavLink to="/community" className="nav-link">Community</NavLink>
                         {user.isAuthenticated === true &&
-                            <NavLink to="/collections" className="nav-link" >Collections</NavLink>
+                            <NavLink to={`/collections?email=${user.email}&page=1&limit=3`} className="nav-link" >Collections</NavLink>
                         }
                         {user.isAuthenticated === false &&
                             <NavLink to="/login" className="nav-link"> Sign in</NavLink>
@@ -71,15 +78,18 @@ const NavHeader = () => {
                         <NavLink to="/about" className="nav-link"> About</NavLink>
                     </Nav>
                     {pathShowSearchBar.includes(window.location.pathname) &&
-                        <Form className="d-flex" >
+                        <Form className="d-flex"  >
                             <Form.Control
                                 type="search"
-                                placeholder="Search"
+                                placeholder="Search for title"
                                 className="me-2"
                                 aria-label="Search"
+                                value={searchBarValue.value}
+                                onChange={(e) => { setSearchBarValue({ value: e.target.value, isSearch: false }) }}
                             />
-                            <Button variant="outline-success">Search</Button>
-                        </Form>}
+                            <Button variant="outline-success" type='submit' onClick={(e) => handleSearchCollections(e)}>Search</Button>
+                        </Form>
+                    }
                     {user.isAuthenticated &&
                         <Nav>
                             <NavDropdown title={<FontAwesomeIcon icon={faGear} className='gear-icon' />}

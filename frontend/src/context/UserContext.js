@@ -10,10 +10,15 @@ const userDefault = {
     username: ''
 
 }
+const searchValueDefault = {
+    value: '',
+    isSearch: false
+}
 
 const UserProvider = ({ children }) => {
     // const navigate = useNavigate();
     const [user, setUser] = useState(userDefault);
+    const [searchValue, setSearch] = useState(searchValueDefault);
     async function getAccount() {
         try {
             let response = null;
@@ -71,9 +76,13 @@ const UserProvider = ({ children }) => {
     const updateUserField = (name, value) => {
         setUser(prevState => ({ ...prevState, [name]: value }))
     }
+    const updateSearchValue = (data) => {
+        setSearch(prevState => data);
+    }
+
 
     return (
-        <UserContext.Provider value={{ user, loginContext, logoutContext, getAccount, updateUserField }}>
+        <UserContext.Provider value={{ user, loginContext, logoutContext, getAccount, updateUserField, searchValue, updateSearchValue }}>
             {children}
         </UserContext.Provider>
     );
