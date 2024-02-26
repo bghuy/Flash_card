@@ -73,7 +73,7 @@ function Login(props) {
                 loginContext(data);
                 // setTimeout(resolve, 0); // Đợi cho đến khi trạng thái cập nhật
                 // });
-                navigate('/collections')
+                navigate('/')
                 // window.location.reload(true);
                 return;
             }

@@ -4,7 +4,7 @@ import MyCollectionC from "./../controller/MyCollectionC.js"
 import UserM from "./../middlewares/UserM.js"
 const router = express.Router();
 const initMyCollectionRoutes = (app) => {
-    // router.all('*', UserM.checkUserJWT);
+    router.all('*', UserM.checkUserJWT);
     router.get("/read", MyCollectionC.readFunc);
     router.post("/create", MyCollectionC.createFunc);
     router.put("/update", MyCollectionC.updateFunc);

@@ -14,7 +14,7 @@ const checkUserJWT = async (req, res, next) => {
             let user = await db.User.findOne(
                 { where: { email: decoded.email } }
             )
-            if (user && user.username && user.email) {
+            if (user && user.username && user.email && user.id) {
                 let payload = {
                     username: user.username,
                     email: user.email,
@@ -22,6 +22,7 @@ const checkUserJWT = async (req, res, next) => {
                 let recreateToken = JwtU.createJWT(payload)
                 req.user = payload;
                 req.token = recreateToken;
+                req.userId = user.id
             }
             else {
                 req.user = null;

@@ -48,7 +48,7 @@ const NavHeader = () => {
         const trimmedSearchValue = searchBarValue.value.trim();
         if (trimmedSearchValue !== '') {
             const searchQuery = encodeURIComponent(trimmedSearchValue);
-            navigate(`/collections?email=${user.email}&page=1&limit=2&search=${searchQuery}`);
+            navigate(`/collections?email=${user.email}&page=1&limit=3&search=${searchQuery}`);
             updateSearchValue({ value: trimmedSearchValue, isSearch: true });
         }
         setSearchBarValue(prevState => (defaultSearchValue))

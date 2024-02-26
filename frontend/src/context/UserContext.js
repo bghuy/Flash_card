@@ -7,7 +7,8 @@ const userDefault = {
     isAuthenticated: false,
     token: "fake token",
     email: '',
-    username: ''
+    username: '',
+    reloadFlag: null
 
 }
 const searchValueDefault = {
@@ -62,6 +63,7 @@ const UserProvider = ({ children }) => {
             setUser(prevState => ({ ...prevState, isLoading: false }))
         }
     }, [])
+
 
 
     const loginContext = (userData) => {

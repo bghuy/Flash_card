@@ -1,6 +1,9 @@
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom"
+import { logout } from "../services/userService"
+import { useContext } from "react"
+import { UserContext } from "../context/UserContext"
 // Add a request interceptor
 // Set config defaults when creating the instance
 const instance = axios.create({
@@ -24,15 +27,19 @@ instance.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response.data;
-}, function (error) {
+}, async function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     const status = error.response?.status || 500;
     const navigate = useNavigate();
+    const { logoutContext } = useContext(UserContext);
     switch (status) {
         // authentication (token related issues)
         case 401: {
             toast.error("Unauthorized the user, please login ...");
+            await logout()
+            logoutContext();
+            navigate("/login")
             // return error && error.response.data;
             return Promise.reject(error);
         }

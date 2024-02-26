@@ -5,11 +5,10 @@ const readFunc = async (req, res) => {
         if (req.query && req.query.email) {
             if (req.query.page && req.query.limit) {
                 const { page, limit, email } = req.query;
-                let search = null;
-                if (req.query.search) {
-                    search = req.query.search;
-                }
-                let data = await MyCollectionS.fetchWithPageAndLimit(email, +page, +limit, search);
+                let search = req.query.search ? req.query.search : null;
+                let field = req.query.field ? req.query.field : "id";
+                let order = req.query.order ? req.query.order : "DESC";
+                let data = await MyCollectionS.fetchWithPageAndLimit(email, +page, +limit, search, field, order);
                 return res.status(200).json({
                     EM: data.EM,//error message
                     EC: data.EC,//error code -1 means error , 0 means no error
@@ -73,9 +72,13 @@ const updateFunc = async (req, res) => {
 }
 const deleteFunc = async (req, res) => {
     try {
-        const { id } = req.body;
-        if (id) {
-            let data = await MyCollectionS.deleteCollection(id);
+
+        // console.log("id:", id);
+        // console.log("userId:", userId);
+        const userId = req.userId;
+        if (req.body && req.body.id && userId) {
+            const id = req.body.id;
+            let data = await MyCollectionS.deleteCollection(id, userId);
             return res.status(200).json({
                 EM: data.EM,//error message
                 EC: data.EC,//error code -1 means error , 0 means no error

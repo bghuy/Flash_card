@@ -37,9 +37,10 @@ const fetchAll = async (userEmail) => {
         }
     }
 }
+
 const update = async (updateData) => {
     try {
-        const { id, title, description } = updateData
+        const { id, title, description, imageName } = updateData
         let my_collection = await db.My_Collection.findOne(
             { where: { id: id } }
         )
@@ -47,6 +48,7 @@ const update = async (updateData) => {
             if (title) {
                 my_collection.title = title;
                 my_collection.description = description;
+                my_collection.imageName = imageName;
                 await my_collection.save()
                 return {
                     EM: "update collection detail success",
@@ -79,14 +81,14 @@ const update = async (updateData) => {
     }
 }
 
-const deleteCollection = async (collectionId) => {
+const deleteCollection = async (collectionId, userId) => {
     try {
         let my_collection = await db.My_Collection.findOne({
             where: { id: collectionId }
         });
-        if (my_collection) {
+        if (my_collection && +my_collection.userId === +userId) {
             await db.My_Collection.destroy({
-                where: { id: collectionId }
+                where: { id: collectionId, userId: userId }
             })
             return {
                 EM: "delete collection successfully",
@@ -139,7 +141,7 @@ const create = async (collectionData) => {
         }
     }
 }
-const fetchWithPageAndLimit = async (userEmail, page, limit, searchTerm) => {
+const fetchWithPageAndLimit = async (userEmail, page, limit, searchTerm, field, order) => {
     try {
         let user = await db.User.findOne(
             { where: { email: userEmail } }
@@ -154,14 +156,14 @@ const fetchWithPageAndLimit = async (userEmail, page, limit, searchTerm) => {
             offset: offset,
             limit: limit,
             where: whereCondition,
-            attributes: ['id', 'title', 'description'],
-            order: [["id", "DESC"]]
+            attributes: ['id', 'title', 'description', 'imageName'],
+            order: [[field, order]]
         })
         const totalPages = Math.ceil(count / limit);
         let data = {
             totalRows: count,
             totalPages: totalPages,
-            my_collection: rows
+            my_collection: rows ? rows : []
         }
         return {
             EM: "get collections success",

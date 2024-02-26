@@ -31,7 +31,7 @@ const loginFunc = async (req, res) => {
             ;
             let data = await UserS.login(req.body);
             if (data && data.DT && data.DT.token) {
-                res.cookie("token", data.DT.token, { httpOnly: true, maxAge: 6 * 60 * 60 * 1000 });
+                res.cookie("token", data.DT.token, { httpOnly: true, maxAge: 12 * 60 * 60 * 1000 });
             }
             return res.status(200).json({
                 EM: data.EM,//error message
