@@ -11,6 +11,15 @@ const checkUserJWT = async (req, res, next) => {
         let token = cookies.token;
         let decoded = UserU.verifyToken(token);
         if (decoded) {
+            if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+                // Xóa cookie khi JWT đã hết hạn
+                res.clearCookie('token');
+                return res.status(401).json({
+                    EM: "The login session is over, please log in",
+                    EC: -1,
+                    DT: null
+                });
+            }
             let user = await db.User.findOne(
                 { where: { email: decoded.email } }
             )

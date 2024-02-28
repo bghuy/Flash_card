@@ -21,6 +21,9 @@ module.exports = {
             imageName: {
                 type: Sequelize.STRING
             },
+            favorite: {
+                type: Sequelize.BOOLEAN
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE

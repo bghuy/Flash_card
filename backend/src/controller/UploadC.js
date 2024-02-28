@@ -2,7 +2,6 @@ import UploadS from "./../services/UploadS.js"
 const appRoot = require('app-root-path');
 const readImage = async (req, res) => {
     const imageName = req.params.imageName;
-    console.log(imageName);
     // const collectionId = req.params.collectionId;
     if (!imageName) {
         // Nếu không có imageName, gửi phản hồi lỗi 400 (Bad Request) cho người dùng

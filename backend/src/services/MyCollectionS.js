@@ -38,17 +38,16 @@ const fetchAll = async (userEmail) => {
     }
 }
 
-const update = async (updateData) => {
+const update = async (updateData, userId) => {
     try {
-        const { id, title, description, imageName } = updateData
+        const { id, title, description } = updateData
         let my_collection = await db.My_Collection.findOne(
-            { where: { id: id } }
+            { where: { id: id, userId: userId } }
         )
         if (my_collection) {
             if (title) {
-                my_collection.title = title;
-                my_collection.description = description;
-                my_collection.imageName = imageName;
+                my_collection.title = title.trim();
+                my_collection.description = description.trim();
                 await my_collection.save()
                 return {
                     EM: "update collection detail success",
@@ -80,7 +79,36 @@ const update = async (updateData) => {
         }
     }
 }
-
+const setFavorite = async (id, userId, favorite) => {
+    try {
+        let my_collection = await db.My_Collection.findOne(
+            { where: { id: id, userId: userId } }
+        )
+        if (my_collection) {
+            my_collection.favorite = favorite === true ? true : false;
+            await my_collection.save()
+            return {
+                EM: "set favorite success",
+                EC: 0,
+                DT: null
+            }
+        }
+        else {
+            return {
+                EM: "not found collection",//error message
+                EC: 3,//error code -1 means error , 0 means no error
+                DT: null
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            EM: "something wrong with service",
+            EC: 4,
+            DT: null
+        }
+    }
+}
 const deleteCollection = async (collectionId, userId) => {
     try {
         let my_collection = await db.My_Collection.findOne({
@@ -112,16 +140,18 @@ const deleteCollection = async (collectionId, userId) => {
         }
     }
 }
-const create = async (collectionData) => {
+const create = async (collectionData, userId) => {
     try {
 
-        let { title, description, userId } = collectionData;
+        let { title, description } = collectionData;
         if (title && title.length > 0) {
-            await db.My_Collection.create({ title: title, description: description, userId: userId });
+            const newCollection = await db.My_Collection.create({ title: title, description: description, userId: userId, imageName: "createdDefaultImg.jpeg", favorite: false });
+            const newCollectionId = newCollection.id;
+            const newCollectionUserId = newCollection.userId;
             return {
                 EM: "create collection success",
                 EC: 0,
-                DT: null
+                DT: { id: newCollectionId, userId: newCollectionUserId }
             }
         }
         else {
@@ -141,7 +171,7 @@ const create = async (collectionData) => {
         }
     }
 }
-const fetchWithPageAndLimit = async (userEmail, page, limit, searchTerm, field, order) => {
+const fetchWithPageAndLimit = async (userEmail, page, limit, searchTerm, field, order, favorite) => {
     try {
         let user = await db.User.findOne(
             { where: { email: userEmail } }
@@ -151,12 +181,15 @@ const fetchWithPageAndLimit = async (userEmail, page, limit, searchTerm, field, 
             // Thêm điều kiện tìm kiếm nếu có
             whereCondition.title = literal(`LOWER(title) LIKE LOWER('%${searchTerm}%')`);
         }
+        if (favorite === "true") {
+            whereCondition.favorite = true;
+        }
         const offset = (page - 1) * limit;
         const { count, rows } = await db.My_Collection.findAndCountAll({
             offset: offset,
             limit: limit,
             where: whereCondition,
-            attributes: ['id', 'title', 'description', 'imageName'],
+            attributes: ['id', 'title', 'description', 'imageName', 'favorite'],
             order: [[field, order]]
         })
         const totalPages = Math.ceil(count / limit);
@@ -179,4 +212,4 @@ const fetchWithPageAndLimit = async (userEmail, page, limit, searchTerm, field, 
         }
     }
 }
-module.exports = { fetchAll, update, deleteCollection, create, fetchWithPageAndLimit }
+module.exports = { fetchAll, update, deleteCollection, create, fetchWithPageAndLimit, setFavorite }
