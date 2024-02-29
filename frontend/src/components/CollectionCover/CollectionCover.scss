@@ -3,9 +3,20 @@
     top: 5px;
     right: 5px;
     color: gray; /* Màu sắc tùy chọn */
-    font-size: 24px; /* Kích thước phù hợp */
+    font-size: 24px;
+    text-shadow: 2px 2px 4px black; /* Kích thước phù hợp */
     z-index: 1; /* Giá trị z-index để đảm bảo nổi lên trên hình ảnh */
-
+  .favorite-icon {
+    cursor: pointer;
+    transition: color 0.1s ease;
+    &:hover{
+      color: red !important
+    }
+    &:hover[is-favorite='true']{
+      color: gray !important
+    }
+    
+  }  
 }
 .dropdown-toggle::after {
     display: none !important;

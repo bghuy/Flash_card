@@ -48,7 +48,7 @@ const NavHeader = () => {
         const trimmedSearchValue = searchBarValue.value.trim();
         if (trimmedSearchValue !== '') {
             const searchQuery = encodeURIComponent(trimmedSearchValue);
-            navigate(`/collections?email=${user.email}&page=1&limit=3&search=${searchQuery}`);
+            navigate(`/collections?email=${user.email}&page=1&limit=4&search=${searchQuery}`);
             updateSearchValue({ value: trimmedSearchValue, isSearch: true });
         }
         setSearchBarValue(prevState => (defaultSearchValue))
@@ -68,9 +68,8 @@ const NavHeader = () => {
                         navbarScroll
                     >
                         <NavLink to="/" className="nav-link">Home</NavLink>
-                        <NavLink to="/community" className="nav-link">Community</NavLink>
                         {user.isAuthenticated === true &&
-                            <NavLink to={`/collections?email=${user.email}&page=1&limit=3`} className="nav-link" >Collections</NavLink>
+                            <NavLink to={`/collections?email=${user.email}&page=1&limit=4`} className="nav-link" >Collections</NavLink>
                         }
                         {user.isAuthenticated === false &&
                             <NavLink to="/login" className="nav-link"> Sign in</NavLink>

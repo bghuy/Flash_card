@@ -5,7 +5,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import UserProfile from './UserProfile/UserProfile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from "./../../context/UserContext.js"
-
+import CollectionFavorite from '../Collections/CollectionFavorite/CollectionFavorite.js';
 // Import tất cả các icon từ thư viện Font Awesome
 import * as faIcons from '@fortawesome/free-solid-svg-icons'
 
@@ -47,8 +47,8 @@ function Profile(props) {
                 <Tab eventKey="profile" title="Profile" >
                     <UserProfile />
                 </Tab>
-                <Tab eventKey="achievements" title="Achievements" >
-                    Tab content for Profile
+                <Tab eventKey="favorite" title="Favorite" >
+                    <CollectionFavorite />
                 </Tab>
                 <Tab eventKey="contact" title="Contact" >
                     Tab content for Contact

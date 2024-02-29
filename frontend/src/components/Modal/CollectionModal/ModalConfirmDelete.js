@@ -8,18 +8,24 @@ import { updateUserEmail, logout } from "./../../../services/userService.js"
 import { UserContext } from './../../../context/UserContext.js';
 import { useNavigate } from "react-router-dom"
 import { deleteCollection } from "./../../../services/myCollectionService.js"
-
+import { deleteCard } from '../../../services/cardService.js';
 const ModalConfirmDelete = (props) => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
-    const { collectionid, reload, show, onHide } = props;
+    const { id, reload, show, onHide } = props;
     const handleCloseModalUser = () => {
         onHide()
     };
 
     const handleConfirmUpdate = async () => {
-        if (collectionid) {
-            let response = await deleteCollection(+collectionid);
+        if (id) {
+            let response = null;
+            if (props.action === "collection") {
+                response = await deleteCollection(+id);
+            }
+            else {
+                response = await deleteCard(+id);
+            }
             if (response && +response.EC === 0 && response.EM) {
                 toast.success(response.EM);
                 // navigate(`/collections?email=${user.email}`);

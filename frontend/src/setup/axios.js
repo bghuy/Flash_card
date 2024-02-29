@@ -37,7 +37,7 @@ instance.interceptors.response.use(function (response) {
         // authentication (token related issues)
         case 401: {
             toast.error("Unauthorized the user, please login ...");
-            await logout()
+            let response = await logout()
             logoutContext();
             navigate("/login")
             // return error && error.response.data;

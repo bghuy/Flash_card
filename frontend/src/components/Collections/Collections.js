@@ -14,22 +14,21 @@ import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faL, faPlus } from '@fortawesome/free-solid-svg-icons'
 import "./Collections.scss"
 import Form from 'react-bootstrap/Form';
-import ModalConfirmDelete from '../Modal/CollectionModal/ModalConfirmDelete.js';
+import ModalCreateCollection from '../Modal/CollectionModal/ModalCreateCollection.js';
 function Collections(props) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { user, searchValue, logoutContext } = useContext(UserContext);
+    const { user, logoutContext } = useContext(UserContext);
     const [my_collections, setMyCollections] = useState([]);
-    const [my_collection_posters, setMyCollectionPosters] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [currentLimit, setCurrentLimit] = useState(3);
+    const [currentLimit, setCurrentLimit] = useState(4);
     const [currentSearch, setCurrentSearch] = useState('');
     const [totalPages, setTotalPages] = useState(0);
     const [sortBy, setSortBy] = useState({ field: 'id', order: 'DESC' });
-
+    const [showCreateCollection, setShowCreateCollection] = useState(false);
     const handlePageClick = async (event) => {
         const selectedPage = +event.selected + 1;
         setCurrentPage(selectedPage);
@@ -39,10 +38,10 @@ function Collections(props) {
     };
     const handleSortChange = (e) => {
         const selectedOption = e.target.value;
-        const { field, order } = JSON.parse(selectedOption);
+        const { field, order, favorite } = JSON.parse(selectedOption);
         setSortBy(prevState => ({ field, order }));
-        navigate(`/collections?email=${user.email}&page=${currentPage}&limit=${currentLimit}&search=${currentSearch}&field=${field}&order=${order}`);
-
+        // &search=${currentSearch}
+        navigate(`/collections?email=${user.email}&page=${currentPage}&limit=${currentLimit}&field=${field}&order=${order}&favorite=${favorite ? true : false}`);
     };
     const fetchCollections = async () => {
         try {
@@ -50,16 +49,17 @@ function Collections(props) {
             const queryParams = new URLSearchParams(location.search);
             const email = queryParams.get('email') || user.email;
             const page = +queryParams.get('page') || 1;
-            const limit = +queryParams.get('limit') || 3;
+            const limit = +queryParams.get('limit') || 4;
             const search = queryParams.get('search') || '';
             const field = queryParams.get('field') || 'id';
             const order = queryParams.get('order') || 'DESC';
+            const favorite = queryParams.get('favorite') || false;
             if (search) {
                 setCurrentSearch(prevState => search)
             }
 
             setCurrentPage(prevState => page);
-            const response = await fetchMyCollection(email, page, limit, search, field, order);
+            const response = await fetchMyCollection(email, page, limit, search, field, order, favorite);
             if (response && +response.EC === 0 && response.EM && response.DT) {
                 const { totalPages, my_collection } = response.DT;
                 setTotalPages(totalPages || 0);
@@ -70,8 +70,6 @@ function Collections(props) {
                 //     element.poster = poster; // Gán trực tiếp cho thuộc tính poster của phần tử element
                 // });
                 // Đợi tất cả các promise trong mảng collectionsWithFile hoàn thành
-
-                console.log("collections:", my_collection);
                 setMyCollections(my_collection || []);
 
             } else {
@@ -86,9 +84,11 @@ function Collections(props) {
 
         }
     };
-    const reload = async () => {
-        // setReload(prevState => true);
-        await fetchCollections();
+    const onHideModalCreateCollection = () => {
+        setShowCreateCollection(false);
+    }
+    const showModalCreateCollection = () => {
+        setShowCreateCollection(true);
     }
     useEffect(() => {
         fetchCollections();
@@ -100,18 +100,24 @@ function Collections(props) {
             <Navbar expand="lg" className="bg-body-tertiary ">
                 <Container className='d-flex justify-content-between'>
                     <Nav>
-                        <Button variant="outline-success" className='add-circle-btn'><FontAwesomeIcon icon={faPlus} /></Button>
+                        <Button variant="outline-success" className='add-circle-btn' onClick={() => { showModalCreateCollection() }}>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </Button>
                     </Nav>
+
                     <Nav>
                         <Form.Select aria-label="Default select example" onChange={(e) => handleSortChange(e)}>
                             <option value={JSON.stringify({ "field": "id", "order": "DESC" })}>Latest</option>
                             <option value={JSON.stringify({ "field": "title", "order": "DESC" })}>Descending title</option>
                             <option value={JSON.stringify({ "field": "title", "order": "ASC" })}>Ascending title</option>
+                            <option value={JSON.stringify({ "field": "id", "order": "DESC", "favorite": true })}>Favorite</option>
                         </Form.Select>
                     </Nav>
+
+
                 </Container>
             </Navbar>
-            <div className='collection-container d-flex gap-5 justify-content-center'>
+            <div className='collection-container d-flex gap-5 justify-content-start flex-wrap'>
                 {my_collections && my_collections.length > 0 ? (
                     my_collections.map((item) => (
                         <CollectionCover
@@ -121,6 +127,8 @@ function Collections(props) {
                             id={item.id}
                             fetchCollections={fetchCollections}
                             imageName={item.imageName || "createdDefaultImg.jpeg"}
+                            favorite={item.favorite}
+                            reload={fetchCollections}
                         />
                     ))
                 ) : (
@@ -132,7 +140,7 @@ function Collections(props) {
                     <ReactPaginate
                         nextLabel="next >"
                         onPageChange={handlePageClick}
-                        pageRangeDisplayed={3}
+                        pageRangeDisplayed={4}
                         marginPagesDisplayed={2}
                         pageCount={totalPages}
                         previousLabel="< previous"
@@ -153,7 +161,11 @@ function Collections(props) {
                 </div>
 
             )}
-
+            <ModalCreateCollection
+                show={showCreateCollection}
+                onHide={onHideModalCreateCollection}
+                reload={fetchCollections}
+            />
         </Container>
     );
 }
