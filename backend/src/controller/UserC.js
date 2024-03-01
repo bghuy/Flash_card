@@ -111,7 +111,7 @@ const readFunc = async (req, res) => {
 }
 const getUserAccount = async (req, res) => {
     if (req && req.user && req.token) {
-        res.cookie("token", req.token, { httpOnly: true, maxAge: 6 * 60 * 60 * 1000 });
+        res.cookie("token", req.token, { httpOnly: true, maxAge: 12 * 60 * 60 * 1000 });
         return res.status(200).json({
             EM: "ok",//error message
             EC: 0,//error code -1 means error , 0 means no error

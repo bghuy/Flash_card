@@ -1,11 +1,11 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
+    "username": "postgres",
+    "password": "123456",
     "database": "flash_card",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "port": 3306,
+    "dialect": "postgres",
+    "port": 5432,
     "logging":false,
     "define":{
       "freezeTableName":true

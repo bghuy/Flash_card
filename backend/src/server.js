@@ -10,6 +10,7 @@ import initUserRoutes from './routes/UserR.js'
 import initMyCollectionRoutes from "./routes/MyCollectionR.js";
 import initUploadsRoutes from "./routes/Upload.js";
 import { handleMulterError } from "./middlewares/MulterM.js"
+import initCardRoutes from "./routes/CardR.js";
 // import { createJWT, verifyToken } from "./middlewares/JWTActions.js"
 const bodyParser = require('body-parser')
 const app = express();
@@ -26,6 +27,7 @@ configViewEngine(app);
 initUserRoutes(app);
 initMyCollectionRoutes(app);
 initUploadsRoutes(app);
+initCardRoutes(app);
 // initWebRoutes(app);
 // initApiRoutes(app);
 const PORT = process.env.PORT || 8000;
