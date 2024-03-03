@@ -47,12 +47,6 @@ function Profile(props) {
                 <Tab eventKey="profile" title="Profile" >
                     <UserProfile />
                 </Tab>
-                <Tab eventKey="favorite" title="Favorite" >
-                    <CollectionFavorite />
-                </Tab>
-                <Tab eventKey="contact" title="Contact" >
-                    Tab content for Contact
-                </Tab>
             </Tabs>
         </>
     );

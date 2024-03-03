@@ -58,7 +58,7 @@ const ModalCreateCard = (props) => {
             const isValid = checkValidateTitle();
             if (isValid) {
                 let data = {
-                    title: collectionDetail.title, description: collectionDetail.description, collectionId: +cId
+                    title: collectionDetail.title, description: collectionDetail.description, collectionId: +cId, email: user.email
                 }
                 const responseUpdate = await createCard(data);
                 if (responseUpdate && +responseUpdate.EC === 0 && responseUpdate.EM) {

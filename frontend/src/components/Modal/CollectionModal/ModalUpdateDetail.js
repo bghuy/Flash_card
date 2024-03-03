@@ -53,9 +53,8 @@ const ModalUpdateDetail = (props) => {
         const isValid = checkValidateInputs();
         if (isValid) {
             let data = {
-                title: collectionDetail.title, description: collectionDetail.description, id: props.collectionid
+                title: collectionDetail.title, description: collectionDetail.description, id: props.id, email: user.email
             }
-            console.log(data);
             const responseUpdate = await updateCollectionDetail(data);
             if (responseUpdate && +responseUpdate.EC === 0 && responseUpdate.EM) {
                 setValidInputs(defaultValidInputs);
@@ -92,7 +91,7 @@ const ModalUpdateDetail = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Group className="mb-3" controlId="formBasicTitle">
                             <Form.Label>Title</Form.Label>
                             <Form.Control
                                 type="text"
@@ -106,7 +105,7 @@ const ModalUpdateDetail = (props) => {
                             </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Group className="mb-3" controlId="formBasicDescription">
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 type="text"

@@ -19,7 +19,7 @@ import "./Card.scss"
 import Form from 'react-bootstrap/Form';
 import ModalCreateCard from '../Modal/CardModal/ModalCreateCard.js';
 import ModalCreateCollection from '../Modal/CollectionModal/ModalCreateCollection.js';
-import CardCover from '../CardCover/CardCover.js';;
+import CardCover from '../CardCover/CardCover.js';
 
 function Cards(props) {
     const navigate = useNavigate();
@@ -71,7 +71,8 @@ function Cards(props) {
                     limit: limit,
                     search: search,
                     field: field,
-                    order: order
+                    order: order,
+                    email: user.email
                 }
                 const response = await fetchListCards(queryField);
                 if (response && +response.EC === 0 && response.EM && response.DT) {

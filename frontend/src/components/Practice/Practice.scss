@@ -1,0 +1,38 @@
+.practice-container{
+    background-color: #000000;
+    color: #fcfbfc;
+    height: 100vh;
+    .start-announce {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* Đảm bảo nó chiếm toàn bộ chiều cao của màn hình */
+    }
+    .practice-header{
+        .current-question{
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+
+        }
+        .clock{
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+        }
+        .true-number-show{
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+        }
+    }
+    .practice-main{
+        border-radius: 1rem;
+        background-color: #461a42;
+        .left-practice{
+            width: 50%;
+        }
+        .right-practice{
+            background-color: #3a1737;
+            width: 50%;
+            border-radius: 1rem;
+        }
+    }
+}

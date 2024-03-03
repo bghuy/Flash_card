@@ -74,7 +74,6 @@ const NavHeader = () => {
                         {user.isAuthenticated === false &&
                             <NavLink to="/login" className="nav-link"> Sign in</NavLink>
                         }
-                        <NavLink to="/about" className="nav-link"> About</NavLink>
                     </Nav>
                     {pathShowSearchBar.includes(window.location.pathname) &&
                         <Form className="d-flex"  >

@@ -37,7 +37,7 @@ function CardCover(props) {
                 variant="flush">
                 {/* </FontAwesomeIcon> */}
                 <Card.Body>
-                    <Card.Title>{props.title}</Card.Title>
+                    <Card.Title >{props.title}</Card.Title>
                     <Card.Text>
                         {props.description}
                     </Card.Text>

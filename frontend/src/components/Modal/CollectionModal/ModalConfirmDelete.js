@@ -17,18 +17,19 @@ const ModalConfirmDelete = (props) => {
         onHide()
     };
 
-    const handleConfirmUpdate = async () => {
+    const handleConfirmDelete = async () => {
         if (id) {
             let response = null;
+            let data = { id: +id, email: user.email }
             if (props.action === "collection") {
-                response = await deleteCollection(+id);
+                response = await deleteCollection(data);
             }
             else {
-                response = await deleteCard(+id);
+                response = await deleteCard(data);
             }
             if (response && +response.EC === 0 && response.EM) {
+                console.log(response.status)
                 toast.success(response.EM);
-                // navigate(`/collections?email=${user.email}`);
                 await reload();
                 handleCloseModalUser();
             }
@@ -62,7 +63,7 @@ const ModalConfirmDelete = (props) => {
                 <Button variant="danger" onClick={handleCloseModalUser} >
                     No
                 </Button>
-                <Button variant="success" onClick={handleConfirmUpdate}>
+                <Button variant="success" onClick={handleConfirmDelete}>
                     Yes
                 </Button>
             </Modal.Footer>
