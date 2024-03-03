@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasMany(models.My_Collection, { foreignKey: 'userId' });
-      User.belongsToMany(models.Collection, {
-        through: 'User_Collection',
-        foreignKey: 'userId' // Trường khóa ngoại trong bảng trung gian liên kết với User
-      });
     }
   }
   User.init({

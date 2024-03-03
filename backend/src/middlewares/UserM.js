@@ -36,6 +36,7 @@ const checkUserJWT = async (req, res, next) => {
             else {
                 req.user = null;
                 req.token = null;
+                req.userId = null;
             }
             return next();
         }

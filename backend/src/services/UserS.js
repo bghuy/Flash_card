@@ -4,51 +4,52 @@ import JwtU from "./../utilities/JwtU.js"
 import { Op } from 'sequelize';
 const create = async (data) => {
     try {
-        if (!UserU.isValidEmail(data.email)) {
+        const { email, password, username, phone } = data;
+        if (!UserU.isValidEmail(email)) {
             return {
                 EM: "email is not valid",
-                EC: 3,
+                EC: -1,
                 DT: null
             };
         }
-        if (!UserU.isValidPhone(data.phone)) {
+        if (!UserU.isValidPhone(phone)) {
             return {
                 EM: "phone number must contain at least 10 characters",
-                EC: 3,
+                EC: -1,
                 DT: null
             };
         }
 
-        if (!UserU.isValidPassword(data.password)) {
+        if (!UserU.isValidPassword(password)) {
             return {
                 EM: "password must contain at least 8 characters and no space",
-                EC: 3,
+                EC: -1,
                 DT: null
             };
         }
 
-        if (await UserU.isExistEmail(data.email)) {
+        if (await UserU.isExistEmail(email)) {
             return {
                 EM: "email has existed",
-                EC: 3,
+                EC: -1,
                 DT: null
             };
         }
-        if (await UserU.isExistPhone(data.phone)) {
+        if (await UserU.isExistPhone(phone)) {
             return {
                 EM: "phone number has existed",
-                EC: 3,
+                EC: -1,
                 DT: null
             };
         }
-        if (await UserU.isExistUsername(data.username)) {
+        if (await UserU.isExistUsername(username)) {
             return {
                 EM: "username has existed",
-                EC: 3,
+                EC: -1,
                 DT: null
             };
         }
-        const { email, password, username, phone } = data;
+
         const hashedPassword = UserU.hashPassword(password);
         await db.User.create({ email: email, password: hashedPassword, username: username, phone: phone });
         return {
@@ -60,7 +61,7 @@ const create = async (data) => {
         console.log(error);
         return {
             EM: "something wrong with service",
-            EC: 4,
+            EC: -1,
             DT: null
         }
     }
@@ -84,8 +85,6 @@ const login = async (data) => {
                     username: user.username,
                 }
                 let token = JwtU.createJWT(payload);
-                // let decoded = JwtU.verifyToken(token);
-                // console.log("check decoded >> ", decoded);
                 return {
                     EM: "login successfully",//error message
                     EC: 0,//error code -1 means error , 0 means no error
@@ -98,7 +97,7 @@ const login = async (data) => {
             } else {
                 return {
                     EM: "login fail, email/phone number or password is in correct",//error message
-                    EC: 3,//error code -1 means error , 0 means no error
+                    EC: -1,//error code -1 means error , 0 means no error
                     DT: null
                 }
             }
@@ -106,7 +105,7 @@ const login = async (data) => {
         else {
             return {
                 EM: "login unsuccessfully",
-                EC: 3,
+                EC: -1,
                 DT: null
             }
         }
@@ -115,7 +114,7 @@ const login = async (data) => {
         console.log(error);
         return {
             EM: "something wrong with service",
-            EC: 4,
+            EC: -1,
             DT: null
         }
     }
@@ -140,7 +139,7 @@ const fetch = async (email) => {
         else {
             return {
                 EM: "not found user",//error message
-                EC: 3,//error code -1 means error , 0 means no error
+                EC: -1,//error code -1 means error , 0 means no error
                 DT: null
             }
         }
@@ -148,7 +147,7 @@ const fetch = async (email) => {
         console.log(error);
         return {
             EM: "something wrong with service",
-            EC: 4,
+            EC: -1,
             DT: null
         }
     }
@@ -174,14 +173,14 @@ const updateUserPW = async (data) => {
                 else {
                     return {
                         EM: "confirmed password is incorrect",//error message
-                        EC: 5,//error code -1 means error , 0 means no error
+                        EC: -1,//error code -1 means error , 0 means no error
                         DT: null
                     }
                 }
             } else {
                 return {
                     EM: "current password is incorrect",//error message
-                    EC: 5,//error code -1 means error , 0 means no error
+                    EC: -1,//error code -1 means error , 0 means no error
                     DT: null
                 }
             }
@@ -189,7 +188,7 @@ const updateUserPW = async (data) => {
         else {
             return {
                 EM: "not found user",//error message
-                EC: 3,//error code -1 means error , 0 means no error
+                EC: -1,//error code -1 means error , 0 means no error
                 DT: null
             }
         }
@@ -197,7 +196,7 @@ const updateUserPW = async (data) => {
         console.log(error);
         return {
             EM: "something wrong with service",
-            EC: 4,
+            EC: -1,
             DT: null
         }
     }
@@ -220,7 +219,7 @@ const editUsername = async (data) => {
             else {
                 return {
                     EM: "please enter new username",
-                    EC: 4,
+                    EC: -1,
                     DT: null
                 }
             }
@@ -228,7 +227,7 @@ const editUsername = async (data) => {
         else {
             return {
                 EM: "not found user",//error message
-                EC: 3,//error code -1 means error , 0 means no error
+                EC: -1,//error code -1 means error , 0 means no error
                 DT: null
             }
         }
@@ -236,19 +235,20 @@ const editUsername = async (data) => {
         console.log(error);
         return {
             EM: "something wrong with service",
-            EC: 4,
+            EC: -1,
             DT: null
         }
     }
 }
 const updateEmail = async (data) => {
     try {
+        const { email, newEmail } = data;
         let user = await db.User.findOne(
-            { where: { email: data.email, username: data.username } }
+            { where: { email: email } }
         )
         if (user) {
             if (data && data.newEmail) {
-                user.email = data.newEmail;
+                user.email = newEmail;
                 await user.save()
                 return {
                     EM: "update email success",
@@ -259,7 +259,7 @@ const updateEmail = async (data) => {
             else {
                 return {
                     EM: "please enter new email",
-                    EC: 4,
+                    EC: -1,
                     DT: null
                 }
             }
@@ -267,7 +267,7 @@ const updateEmail = async (data) => {
         else {
             return {
                 EM: "not found user",//error message
-                EC: 3,//error code -1 means error , 0 means no error
+                EC: -1,//error code -1 means error , 0 means no error
                 DT: null
             }
         }
@@ -275,19 +275,20 @@ const updateEmail = async (data) => {
         console.log(error);
         return {
             EM: "something wrong with service",
-            EC: 4,
+            EC: -1,
             DT: null
         }
     }
 }
 const updatePhone = async (data) => {
     try {
+        const { email, newPhone } = data
         let user = await db.User.findOne(
-            { where: { email: data.email, username: data.username } }
+            { where: { email: email } }
         )
         if (user) {
-            if (data && data.newPhone) {
-                user.phone = data.newPhone;
+            if (newPhone) {
+                user.phone = newPhone;
                 await user.save()
                 return {
                     EM: "update phone number success",
@@ -298,7 +299,7 @@ const updatePhone = async (data) => {
             else {
                 return {
                     EM: "please enter new phone number",
-                    EC: 4,
+                    EC: -1,
                     DT: null
                 }
             }
@@ -306,7 +307,7 @@ const updatePhone = async (data) => {
         else {
             return {
                 EM: "not found user",//error message
-                EC: 3,//error code -1 means error , 0 means no error
+                EC: -1,//error code -1 means error , 0 means no error
                 DT: null
             }
         }
@@ -314,7 +315,7 @@ const updatePhone = async (data) => {
         console.log(error);
         return {
             EM: "something wrong with service",
-            EC: 4,
+            EC: -1,
             DT: null
         }
     }
